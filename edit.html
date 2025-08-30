@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoundCircle - Editing Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/wavesurfer.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: #fafafd;
+      color: #222;
+    }
+
+    a.back-dashboard-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: 2.5rem;
+      background: #7b3ff2;
+      color: #fff;
+      border: none;
+      padding: 0.7rem 1.6rem;
+      border-radius: 0.7rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      z-index: 20;
+      transition: background 0.2s;
+    }
+    a.back-dashboard-btn:hover { background: #5e2bc5; }
+
+    h1 {
+      text-align: center;
+      color: #7b3ff2;
+      font-size: 2.5rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto 4rem;
+      padding: 0 2rem;
+    }
+
+    /* Cards */
+    .card {
+      background: #f3e8ff;
+      border-radius: 1rem;
+      padding: 1.8rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+    }
+    .card h2 {
+      margin-top: 0;
+      color: #7b3ff2;
+      margin-bottom: 1rem;
+    }
+
+    /* Waveform */
+    #waveform {
+      width: 100%;
+      height: 150px;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      background: #fff;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .control-btn {
+      padding: 0.8rem 1.2rem;
+      border-radius: 0.7rem;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+      min-width: 100px;
+    }
+    .play-btn { background: #22c55e; color: #fff; }
+    .stop-btn { background: #ef4444; color: #fff; }
+    .trim-btn { background: #3b82f6; color: #fff; }
+    .export-btn { background: #7b3ff2; color: #fff; }
+    .control-btn:hover { opacity: 0.85; }
+
+    /* Sliders */
+    .slider-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    input[type=range] { flex: 1; accent-color: #7b3ff2; }
+    .slider-label { min-width: 120px; font-weight: 600; }
+
+    /* File Upload */
+    .file-upload {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+    .file-upload input {
+      padding: 0.6rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      flex: 1;
+    }
+    .file-upload button {
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.5rem;
+      border: none;
+      background: #7b3ff2;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .file-upload button:hover { background: #5e2bc5; }
+
+    /* Trim times display */
+    .trim-times {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    /* Dark Mode */
+    body.dark-mode {
+      background: #121212;
+      color: #f1f1f1;
+    }
+    body.dark-mode .card {
+      background: #1e1e1e;
+      box-shadow: 0 4px 20px rgba(123,63,242,0.2);
+      color: #f1f1f1;
+    }
+    body.dark-mode h1,
+    body.dark-mode .card h2 {
+      color: #d8b4fe;
+    }
+    body.dark-mode #waveform { background: #2a2a2a; }
+    body.dark-mode .slider-label,
+    body.dark-mode .trim-times span,
+    body.dark-mode .file-upload input {
+      color: #f1f1f1;
+    }
+    body.dark-mode .file-upload input { background: #2a2a2a; border: 1px solid #555; color: #f1f1f1; }
+    body.dark-mode .control-btn { color: #fff; }
+    body.dark-mode .back-dashboard-btn { background: #7b3ff2; color: #fff; }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-dashboard-btn">Back to Dashboard</a>
+  <h1>Editing Studio</h1>
+
+  <div class="container">
+    <!-- Upload & Waveform -->
+    <div class="card">
+      <h2>Upload / Load Recording</h2>
+      <div class="file-upload">
+        <input type="file" id="audioFile" accept="audio/*">
+        <button id="loadBtn">Load</button>
+      </div>
+
+      <div id="waveform"></div>
+
+      <div class="trim-times">
+        <span>Start: <span id="trimStart">0:00</span></span>
+        <span>End: <span id="trimEnd">0:00</span></span>
+      </div>
+
+      <div class="controls">
+        <button class="control-btn play-btn" id="playBtn">Play</button>
+        <button class="control-btn stop-btn" id="stopBtn">Stop</button>
+        <button class="control-btn trim-btn" id="trimBtn">Trim</button>
+        <button class="control-btn export-btn" id="exportBtn">Export</button>
+      </div>
+
+      <div class="slider-group">
+        <span class="slider-label">Volume:</span>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
+      </div>
+
+      <div class="slider-group">
+        <span class="slider-label">Gain / Leveling:</span>
+        <input type="range" id="gainSlider" min="0" max="2" step="0.01" value="1">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize dark mode from index.html preference
+    if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+
+    let wavesurfer = WaveSurfer.create({
+      container: '#waveform',
+      waveColor: '#a78bfa',
+      progressColor: '#7b3ff2',
+      height: 150,
+      responsive: true
+    });
+
+    const audioFileInput = document.getElementById('audioFile');
+    const loadBtn = document.getElementById('loadBtn');
+    const playBtn = document.getElementById('playBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const trimBtn = document.getElementById('trimBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    const trimStartEl = document.getElementById('trimStart');
+    const trimEndEl = document.getElementById('trimEnd');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const gainSlider = document.getElementById('gainSlider');
+
+    let region;
+
+    // Load audio
+    loadBtn.addEventListener('click', () => {
+      const file = audioFileInput.files[0];
+      if (!file) return alert('Please select an audio file');
+      const url = URL.createObjectURL(file);
+      wavesurfer.load(url);
+    });
+
+    // Play / Pause
+    playBtn.addEventListener('click', () => {
+      wavesurfer.playPause();
+    });
+
+    // Stop
+    stopBtn.addEventListener('click', () => {
+      wavesurfer.stop();
+    });
+
+    // Volume & Gain
+    volumeSlider.addEventListener('input', e => {
+      wavesurfer.setVolume(parseFloat(e.target.value));
+    });
+    gainSlider.addEventListener('input', e => {
+      wavesurfer.setVolume(parseFloat(volumeSlider.value) * parseFloat(e.target.value));
+    });
+
+    // Regions for trim
+    wavesurfer.on('ready', () => {
+      wavesurfer.enableDragSelection({ color: 'rgba(123,63,242,0.3)' });
+    });
+    wavesurfer.on('region-updated', (reg) => {
+      region = reg;
+      trimStartEl.textContent = formatTime(region.start);
+      trimEndEl.textContent = formatTime(region.end);
+    });
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${s.toString().padStart(2,'0')}`;
+    }
+
+    // Trim button
+    trimBtn.addEventListener('click', () => {
+      if (!region) return alert('Select a region to trim!');
+      const start = region.start;
+      const end = region.end;
+      wavesurfer.backend.buffer = trimBuffer(wavesurfer.backend.buffer, start, end);
+      wavesurfer.clearRegions();
+      region = null;
+      trimStartEl.textContent = '0:00';
+      trimEndEl.textContent = '0:00';
+    });
+
+    function trimBuffer(buffer, start, end) {
+      const sampleRate = buffer.sampleRate;
+      const startSample = Math.floor(start * sampleRate);
+      const endSample = Math.floor(end * sampleRate);
+      const length = endSample - startSample;
+      const trimmedBuffer = wavesurfer.backend.ac.createBuffer(
+        buffer.numberOfChannels,
+        length,
+        sampleRate
+      );
+      for (let i = 0; i < buffer.numberOfChannels; i++) {
+        trimmedBuffer.copyToChannel(buffer.getChannelData(i).slice(startSample, endSample), i);
+      }
+      return trimmedBuffer;
+    }
+
+    // Export as WAV
+    exportBtn.addEventListener('click', () => {
+      wavesurfer.exportPCM(44100, 16).then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'trimmed.wav';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }).catch(() => alert('Export failed!'));
+    });
+  </script>
+</body>
+</html>

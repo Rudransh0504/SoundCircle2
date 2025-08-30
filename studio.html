@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoundCircle Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .back-dashboard-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: 2.5rem;
+      background: #7b3ff2;
+      color: #fff;
+      border: none;
+      padding: 0.7rem 1.6rem;
+      border-radius: 0.7rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      z-index: 20;
+      transition: background 0.2s;
+    }
+    .back-dashboard-btn:hover { background: #5e2bc5; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #fafafd;
+      color: #1f1f1f;
+    }
+    .navbar { background: rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
+    .card {
+      background: #f3e8ff;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 6px 16px rgba(123,63,242,0.2);
+      transition: transform 0.2s ease;
+    }
+    .card:hover { transform: translateY(-4px); }
+    .card-title { font-weight: 600; color: #7b3ff2; }
+
+    .btn-primary { background-color: #7b3ff2; color: #fff; padding: 0.6rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: 0.3s; }
+    .btn-primary:hover { background-color: #6a35d8; }
+    .btn-outline { border: 2px solid #7b3ff2; color: #7b3ff2; padding: 0.6rem 1.5rem; border-radius: 0.5rem; font-weight: 600; background: transparent; transition: 0.3s; }
+    .btn-outline:hover { background-color: #7b3ff2; color: #fff; }
+
+    .textarea, .input-modern {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ddd;
+      outline: none;
+    }
+    .textarea:focus, .input-modern:focus {
+      border-color: #7b3ff2;
+      box-shadow: 0 0 0 2px rgba(123,63,242,0.3);
+    }
+
+    /* Recording Controls */
+    .control-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border: none;
+      color: white;
+    }
+    .play-btn { background: #22c55e; } /* green */
+    .stop-btn { background: #ef4444; } /* red */
+    .mute-btn { background: #9ca3af; } /* gray */
+    .control-btn:hover { opacity: 0.85; }
+
+    /* Background Music */
+    .music-track {
+      display: flex;
+      align-items: center;
+      background: #fafafa;
+      border: 1px solid #eee;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      color: #222;
+    }
+    .music-track .track-name {
+      flex: 1;
+      font-weight: 500;
+      color: #222;
+    }
+    .music-play-btn { background: #7b3ff2; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 1rem; margin-right: 12px; cursor: pointer; }
+    .volume-slider { width: 100px; accent-color: #7b3ff2; }
+    .music-actions { display: flex; justify-content: space-between; margin-top: 20px; }
+    .choose-btn { background: #f5f5f5; color: #222; border: 1px solid #ccc; padding: 10px 18px; border-radius: 8px; cursor: pointer; }
+    .choose-btn:hover { background: #eee; }
+    .add-btn { background: #7b3ff2; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; }
+    .add-btn:hover { background: #5e2bc5; }
+
+    /* AI Tool buttons */
+    .btn-ai-green { background: #22c55e; color: #fff; padding: 0.6rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: 0.3s; }
+    .btn-ai-green:hover { background: #1ba34b; }
+    .btn-ai-blue { background: #3b82f6; color: #fff; padding: 0.6rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: 0.3s; }
+    .btn-ai-blue:hover { background: #2563eb; }
+    .btn-ai-purple { background: #7b3ff2; color: #fff; padding: 0.6rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: 0.3s; }
+    .btn-ai-purple:hover { background: #5e2bc5; }
+
+    /* Dark Theme */
+    body.dark-mode {
+      background: #121212;
+      color: #f1f1f1;
+    }
+    body.dark-mode .navbar { 
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+    }
+    body.dark-mode .card {
+      background: #1e1e1e;
+      box-shadow: 0 6px 16px rgba(123,63,242,0.3);
+      color: #f1f1f1;
+    }
+    body.dark-mode .card-title { color: #d8b4fe; }
+    body.dark-mode .btn-primary,
+    body.dark-mode .add-btn,
+    body.dark-mode .btn-ai-green,
+    body.dark-mode .btn-ai-blue,
+    body.dark-mode .btn-ai-purple {
+      filter: brightness(1.2);
+    }
+    body.dark-mode .btn-outline,
+    body.dark-mode .choose-btn {
+      border-color: #d8b4fe;
+      color: #d8b4fe;
+      background: #2a2a2a;
+    }
+    body.dark-mode .music-track {
+      background: #2a2a2a;
+      border-color: #444;
+      color: #f1f1f1;
+    }
+    body.dark-mode .music-track .track-name { color: #d8b4fe; }
+    body.dark-mode .volume-slider { accent-color: #d8b4fe; }
+    body.dark-mode .input-modern,
+    body.dark-mode .textarea {
+      background: #1e1e1e;
+      color: #f1f1f1;
+      border-color: #555;
+    }
+    body.dark-mode .back-dashboard-btn {
+      background: #7b3ff2;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-dashboard-btn">Back to Dashboard</a>
+  <h1 class="text-5xl font-bold text-center mt-8 mb-6" style="color: #7b3ff2;">Collaborater Studio</h1>
+
+  <div class="container mx-auto px-6 py-8">
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Recording Controls -->
+      <div class="card flex flex-col items-center">
+        <h2 class="card-title text-xl mb-4">Recording Controls</h2>
+        <div id="recordingTimer" class="text-3xl font-mono text-green-500 mb-6">00:00</div>
+        <div class="flex gap-6 mb-4">
+          <button id="playBtn" class="control-btn play-btn">▶</button>
+          <button id="stopBtn" class="control-btn stop-btn">⏹</button>
+          <button id="muteBtn" class="control-btn mute-btn">🔇</button>
+        </div>
+        <div class="flex items-center gap-2 mb-4">
+          <span id="recordingIndicator" class="w-3 h-3 rounded-full bg-gray-400"></span>
+          <span class="text-gray-700 font-medium">Recording</span>
+        </div>
+      </div>
+
+      <!-- Episode Script -->
+      <div class="card">
+        <h2 class="card-title text-xl mb-4">Episode Script</h2>
+        <textarea class="textarea" rows="6" placeholder="Write your script here..."></textarea>
+        <div class="flex gap-2 mt-3">
+          <button class="btn-primary">Copy</button>
+          <button class="btn-outline">Download</button>
+        </div>
+      </div>
+
+      <!-- Background Music -->
+      <div class="card">
+        <h2 class="card-title text-xl mb-4">Background Music</h2>
+        <div class="music-track"><button class="music-play-btn">▶</button><span class="track-name">LO-Fi Beats</span><input type="range" class="volume-slider" min="0" max="100" value="70"></div>
+        <div class="music-track"><button class="music-play-btn">▶</button><span class="track-name">Upbeat Track</span><input type="range" class="volume-slider" min="0" max="100" value="70"></div>
+        <div class="music-track"><button class="music-play-btn">▶</button><span class="track-name">Ambient Waves</span><input type="range" class="volume-slider" min="0" max="100" value="70"></div>
+        <div class="music-track"><button class="music-play-btn">▶</button><span class="track-name">Energetic Vibes</span><input type="range" class="volume-slider" min="0" max="100" value="70"></div>
+        <div class="music-track"><button class="music-play-btn">▶</button><span class="track-name">Soft Piano</span><input type="range" class="volume-slider" min="0" max="100" value="70"></div>
+        <div class="music-actions">
+          <button class="choose-btn">Choose File</button>
+          <button class="add-btn">+ Add Track</button>
+        </div>
+      </div>
+
+      <!-- AI Tools + Collaborators -->
+      <div class="md:col-span-3 flex flex-col md:flex-row justify-center gap-6 mt-6">
+        <!-- AI Tools -->
+        <div class="card w-full md:w-1/3">
+          <h2 class="card-title text-xl mb-4">AI Tools</h2>
+          <div class="mb-6">
+            <label class="block mb-2 font-medium text-gray-700">AI Script Suggestion:</label>
+            <textarea class="textarea" rows="4" placeholder="Click 'Generate' to get suggestions..."></textarea>
+            <div class="flex gap-2 mt-3">
+              <button class="btn-ai-green">Generate</button>
+              <button class="btn-outline">Copy</button>
+              <button class="btn-ai-blue">Download</button>
+            </div>
+          </div>
+          <div>
+            <label class="block mb-2 font-medium text-gray-700">AI Show Notes:</label>
+            <textarea class="textarea" rows="4" placeholder="Click 'Generate' to summarize..."></textarea>
+            <div class="flex gap-2 mt-3">
+              <button class="btn-ai-purple">Generate</button>
+              <button class="btn-outline">Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collaborators -->
+        <div class="card w-full md:w-1/3">
+          <h2 class="card-title text-xl mb-4">Collaborators</h2>
+          <ul id="collaboratorList" class="flex flex-col gap-3">
+            <li class="flex justify-between items-center bg-gray-100 px-3 py-2 rounded">
+              <span>Teammate 1</span> <span class="text-green-500 text-sm">● Online</span>
+            </li>
+          </ul>
+          <div class="flex gap-3 mt-3">
+            <input type="text" placeholder="Enter name" class="input-modern">
+            <button class="btn-primary" id="addCollaborator">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio playback element -->
+  <audio id="playbackAudio" controls class="hidden mt-4 w-full"></audio>
+
+  <script>
+    // Dark mode initialization
+    if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+
+    // Recording
+    let mediaRecorder;
+    let audioChunks = [];
+    let timerInterval;
+    let seconds = 0;
+    let isMuted = false;
+
+    const playBtn = document.getElementById('playBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const muteBtn = document.getElementById('muteBtn');
+    const timerDisplay = document.getElementById('recordingTimer');
+    const recordingIndicator = document.getElementById('recordingIndicator');
+    const playbackAudio = document.getElementById('playbackAudio');
+
+    function updateTimer() {
+      seconds++;
+      const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const secs = String(seconds % 60).padStart(2, '0');
+      timerDisplay.textContent = `${mins}:${secs}`;
+    }
+
+    playBtn.addEventListener('click', async () => {
+      if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstart = () => {
+          seconds = 0;
+          timerDisplay.textContent = '00:00';
+          recordingIndicator.classList.replace('bg-gray-400','bg-red-500');
+          timerInterval = setInterval(updateTimer, 1000);
+        };
+        mediaRecorder.onstop = () => {
+          clearInterval(timerInterval);
+          recordingIndicator.classList.replace('bg-red-500','bg-gray-400');
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          const audioUrl = URL.createObjectURL(audioBlob);
+          playbackAudio.src = audioUrl;
+          playbackAudio.classList.remove('hidden');
+        };
+
+        mediaRecorder.start();
+      }
+    });
+
+    stopBtn.addEventListener('click', () => {
+      if(mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+    });
+
+    muteBtn.addEventListener('click', () => {
+      isMuted = !isMuted;
+      muteBtn.textContent = isMuted ? '🔈' : '🔇';
+      if(mediaRecorder && mediaRecorder.stream) {
+        mediaRecorder.stream.getAudioTracks().forEach(track => track.enabled = !isMuted);
+      }
+    });
+
+    // Collaborators
+    const addBtn = document.getElementById('addCollaborator');
+    const inputField = document.querySelector('.input-modern');
+    const collaboratorList = document.getElementById('collaboratorList');
+
+    addBtn.addEventListener('click', () => {
+      const name = inputField.value.trim();
+      if(name === '') return;
+
+      const li = document.createElement('li');
+      li.className = 'flex justify-between items-center bg-gray-100 px-3 py-2 rounded';
+      li.innerHTML = `<span>${name}</span> <span class="text-green-500 text-sm">● Online</span>`;
+
+      collaboratorList.appendChild(li);
+      inputField.value = '';
+    });
+  </script>
+</body>
+</html>

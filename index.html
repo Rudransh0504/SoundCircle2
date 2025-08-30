@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoundCircle - Podcast Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <style>
+    html, body {
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fafafd;
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4vw;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      height: 70px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      transition: background 0.3s;
+    }
+
+    .logo img {
+      height: 60px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #222;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 100%;
+      height: 2px;
+      background: #7b3ff2;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    nav a:hover::after {
+      transform: scaleX(1);
+    }
+
+    nav a:hover {
+      color: #7b3ff2;
+    }
+
+    .theme-toggle {
+      cursor: pointer;
+      font-size: 1.3rem;
+      margin-left: 1rem;
+      user-select: none;
+      transition: color 0.3s;
+    }
+
+    .hero {
+      flex: 1;
+      display: flex;
+      height: calc(100vh - 70px);
+    }
+
+    .hero-text {
+      flex: 1;
+      padding: 4rem 4vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: color 0.3s;
+    }
+
+    .hero-title {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 2rem;
+      line-height: 1.1;
+      transition: color 0.3s;
+    }
+
+    .hero-text .highlight { color: #7b3ff2; }
+
+    .hero-desc {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      transition: color 0.3s;
+    }
+
+    .cta-btn, .login-btn {
+      font-size: 1.05rem;
+      padding: 0.7rem 2.2rem;
+      border-radius: 0.7rem;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+    }
+
+    .cta-btn {
+      background: #7b3ff2;
+      color: #fff;
+      border: 2px solid #7b3ff2;
+      margin-right: 1rem;
+    }
+
+    .cta-btn:hover {
+      background: #5e2bc5;
+      border-color: #5e2bc5;
+    }
+
+    .login-btn {
+      background: #fff;
+      color: #7b3ff2;
+      border: 2px solid #7b3ff2;
+      margin-left: 1rem;
+    }
+
+    .login-btn:hover {
+      background: #7b3ff2;
+      color: #fff;
+    }
+
+    .hero-buttons {
+      margin-top: 0.0rem;
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .hero-image {
+      flex: 1;
+      position: relative;
+      background: url("podcast.png") center center/cover no-repeat;
+      transition: background 0.3s;
+    }
+
+    .hero-image::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to left, rgba(250,250,253,0) 85%, #fafafd 100%);
+      transition: background 0.3s;
+    }
+
+    /* Dark Mode */
+    body.dark-mode {
+      background: #000;
+      color: #fff;
+    }
+
+    body.dark-mode header {
+      background: rgba(123, 63, 242, 0.3);
+    }
+
+    body.dark-mode nav a {
+      color: #fff;
+    }
+
+    body.dark-mode nav a:hover {
+      color: #fff;
+    }
+
+    body.dark-mode .hero-title,
+    body.dark-mode .hero-desc {
+      color: #fff;
+    }
+
+    body.dark-mode .hero-image::after {
+      background: linear-gradient(to left, rgba(0,0,0,0) 85%, #000 100%);
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        height: auto;
+      }
+      .hero-image {
+        height: 300px;
+        width: 100%;
+      }
+      .hero-image::after {
+        background: linear-gradient(to top, #fafafd 0%, rgba(250,250,253,0) 60%);
+      }
+      .hero-text {
+        text-align: center;
+      }
+      .hero-buttons {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <img src="logo.png" alt="SoundCircle Logo">
+    </div>
+    <nav>
+      <a href="studio.html">Studio</a>
+      <a href="publish.html">Publish</a>
+      <a href="edit.html">Edit</a>
+      <a href="#">About</a>
+      <span class="theme-toggle" id="themeToggle"><i class="far fa-moon"></i></span>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1 class="hero-title">Welcome To <br> The <span class="highlight">SoundCircle</span></h1>
+      <p class="hero-desc">The all-in-one collaborative platform where creators record, edit, and publish podcasts.</p>
+      <div class="hero-buttons">
+        <a href="#" class="cta-btn">Start trial for free</a>
+        <a href="#" class="login-btn">Login</a>
+      </div>
+    </div>
+    <div class="hero-image"></div>
+  </section>
+
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+
+    // Apply saved theme on load
+    if(localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      if(document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        localStorage.setItem('theme', 'light');
+        themeToggle.innerHTML = '<i class="far fa-moon"></i>';
+      }
+    });
+  </script>
+
+</body>
+</html>

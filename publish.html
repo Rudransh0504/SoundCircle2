@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoundCircle - Publishing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    .back-dashboard-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: 2.5rem;
+      background: #7b3ff2;
+      color: #fff;
+      border: none;
+      padding: 0.7rem 1.6rem;
+      border-radius: 0.7rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      z-index: 20;
+      transition: background 0.2s;
+    }
+    .back-dashboard-btn:hover { background: #5e2bc5; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: #fafafd;
+      color: #222;
+    }
+
+    /* Navbar (reuse hero theme) */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4vw;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      height: 70px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo img { height: 60px; width: auto; object-fit: contain; }
+    nav { display: flex; gap: 2rem; }
+    nav a { text-decoration: none; color: #222; font-weight: 500; }
+
+    /* Page Layout */
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #7b3ff2; text-align: center; }
+
+    .publish-box {
+      background: #f3e8ff;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      margin-bottom: 3rem;
+    }
+    .publish-box h2 { margin-top: 0; margin-bottom: 1rem; }
+
+    .form-group { margin-bottom: 1.5rem; }
+
+    label { font-weight: 600; display: block; margin-bottom: 0.5rem; }
+    select, input {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .publish-btn {
+      background: #7b3ff2;
+      color: #fff;
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 0.7rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .publish-btn:hover { background: #5e2bc5; }
+
+    /* Previous Publishing Section */
+    .history { margin-top: 2rem; }
+    .history h2 { margin-bottom: 1rem; }
+    .publish-list { display: flex; flex-direction: column; gap: 1rem; }
+    .publish-card {
+      background: #f3e8ff;
+      padding: 1rem 1.5rem;
+      border-radius: 0.7rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .publish-card .details { flex: 1; }
+    .publish-card h3 { margin: 0 0 0.3rem; font-size: 1.2rem; }
+    .publish-card p { margin: 0; font-size: 0.9rem; color: #666; }
+    .publish-card .status { font-weight: 600; color: #7b3ff2; }
+
+    /* Dark Mode */
+    body.dark-mode {
+      background: #121212;
+      color: #f1f1f1;
+    }
+    body.dark-mode header {
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(12px);
+    }
+    body.dark-mode .publish-box,
+    body.dark-mode .publish-card {
+      background: #1e1e1e;
+      box-shadow: 0 4px 20px rgba(123,63,242,0.2);
+      color: #f1f1f1;
+    }
+    body.dark-mode .publish-card p { color: #bbb; }
+    body.dark-mode h1, body.dark-mode .status { color: #d8b4fe; }
+    body.dark-mode label { color: #f1f1f1; }
+    body.dark-mode select, body.dark-mode input {
+      background: #2a2a2a;
+      border: 1px solid #555;
+      color: #f1f1f1;
+    }
+    body.dark-mode .publish-btn {
+      background: #7b3ff2;
+      color: #fff;
+    }
+    body.dark-mode .publish-btn:hover { background: #5e2bc5; }
+    body.dark-mode .back-dashboard-btn { background: #7b3ff2; color: #fff; }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-dashboard-btn">Back to Dashboard</a>
+
+  <div class="container">
+    <h1>Publishing Dashboard</h1>
+
+    <!-- Publish New Recording -->
+    <div class="publish-box">
+      <h2>Publish Your Recording</h2>
+      <div class="form-group">
+        <label for="recording">Select Recording:</label>
+        <select id="recording">
+          <option>Episode 1 - AI Revolution</option>
+          <option>Episode 2 - The Future of Sound</option>
+          <option>Episode 3 - Interview with John Doe</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="platform">Choose Platform:</label>
+        <select id="platform">
+          <option>Spotify</option>
+          <option>Apple Podcasts</option>
+          <option>Google Podcasts</option>
+          <option>SoundCircle Only</option>
+        </select>
+      </div>
+      <button class="publish-btn">Publish</button>
+    </div>
+
+    <!-- Previous Publishing -->
+    <div class="history">
+      <h2>Previous Publishings</h2>
+      <div class="publish-list">
+        <div class="publish-card">
+          <div class="details">
+            <h3>Episode 1 - AI Revolution</h3>
+            <p>Published to Spotify on Aug 28, 2025</p>
+          </div>
+          <div class="status">✔ Live</div>
+        </div>
+        <div class="publish-card">
+          <div class="details">
+            <h3>Episode 2 - The Future of Sound</h3>
+            <p>Published to Apple Podcasts on Aug 20, 2025</p>
+          </div>
+          <div class="status">✔ Live</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize dark mode from index.html preference
+    if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+  </script>
+</body>
+</html>
